@@ -1,3 +1,4 @@
+/*
 select 
 	*
 from
@@ -10,4 +11,63 @@ where
 
 select * from blok_inspeksi where inspeksi_id in (select id from inspeksi where user_uuid = '5d6bef02-3d6f-4d2f-9dac-44633187b4ca')
 --update blok_inspeksi set category_id = 5 where inspeksi_id in (select id from inspeksi where user_uuid = '5d6bef02-3d6f-4d2f-9dac-44633187b4ca')
+*/
+
+
+select
+	*
+from
+	blok_inspeksi bi
+	left join inspeksi i on i.id = bi.inspeksi_id
+	left join picture p on p.blok_inspeksi_id = bi.id
+	left join users u on u.uuid = i.user_uuid
+where
+	u.name = 'AKIP RAHMAD'
+;
+
+
+delete from picture where blok_inspeksi_id in (
+	select distinct
+		bi.id
+	from
+		blok_inspeksi bi
+		left join inspeksi i on i.id = bi.inspeksi_id
+		left join users u on u.uuid = i.user_uuid
+	where
+		u.name = 'AKIP RAHMAD'
+);
+
+delete from blok_inspeksi where id in (
+	select distinct
+		bi.id
+	from
+		blok_inspeksi bi
+		left join inspeksi i on i.id = bi.inspeksi_id 
+		left join users u on u.uuid = i.user_uuid
+	where
+		u.name = 'AKIP RAHMAD'
+);
+
+delete from inspeksi where id in (
+	select distinct
+		i.id
+	from
+		inspeksi i
+		left join users u on u.uuid = i.user_uuid
+	where
+		u.name = 'AKIP RAHMAD'
+);
+
+
+update blok_inspeksi set category_id = 5
+where id in (
+	select distinct
+		bi.id
+	from
+		blok_inspeksi bi
+		left join inspeksi i on i.id = bi.inspeksi_id
+		left join users u on u.uuid = i.user_uuid
+	where
+		u.name = 'Devi Hermansa'
+);
 
