@@ -1,9 +1,12 @@
-SELECT
+-- Report Inspeksi Per Karyawan
+select
+	u.uuid,
     u.nomor_induk_pegawai AS nip,
     u.name,
     u.job_position,
     e.name estate,
     u.divisi,
+    COUNT(bi.id) jml,
     COUNT(bi.id) FILTER (WHERE to_char(i.date, 'DD') = '01') AS "01",
     COUNT(bi.id) FILTER (WHERE to_char(i.date, 'DD') = '02') AS "02",
     COUNT(bi.id) FILTER (WHERE to_char(i.date, 'DD') = '03') AS "03",
@@ -41,8 +44,37 @@ FROM
     LEFT JOIN picture p ON p.blok_inspeksi_id = bi.id
     LEFT JOIN users u ON u.uuid = i.user_uuid
     LEFT JOIN estate e ON e.id = u.estate_id
+--WHERE
+----    to_char(i.date, 'YYYYMM') = '202504'
+ --   and u.estate_id = 3
+GROUP BY
+	u.uuid,
+    u.nomor_induk_pegawai,
+    u.name,
+    u.job_position,
+    e.name,
+    u.divisi
+ORDER BY
+    UPPER(u.name)
+;
+
+-- Cek Hasil Upload
+SELECT
+    u.nomor_induk_pegawai AS nip,
+    u.name,
+    u.job_position,
+    e.name estate,
+    u.divisi,
+    COUNT(bi.id) jumlah_inspeksi
+FROM
+    blok_inspeksi bi
+    LEFT JOIN inspeksi i ON i.id = bi.inspeksi_id
+    LEFT JOIN picture p ON p.blok_inspeksi_id = bi.id
+    LEFT JOIN users u ON u.uuid = i.user_uuid
+    LEFT JOIN estate e ON e.id = u.estate_id
 WHERE
     to_char(i.date, 'YYYYMM') = '202504'
+    and u.estate_id = 3
 GROUP BY
     u.nomor_induk_pegawai,
     u.name,
@@ -50,7 +82,6 @@ GROUP BY
     e.name,
     u.divisi
 ORDER BY
-    e.name,
-    u.divisi,
     u.name
 ;
+
