@@ -1,7 +1,7 @@
 -- Report Inspeksi Per Karyawan
 select
 	u.uuid,
-    u.nomor_induk_pegawai AS nip,
+	u.nomor_induk_pegawai AS nip,
     u.name,
     u.job_position,
     e.name estate,
