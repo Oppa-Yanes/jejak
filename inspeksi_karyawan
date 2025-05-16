@@ -40,12 +40,11 @@ FROM
 	employee emp
 	LEFT JOIN users u ON u.odoo_id = emp.id
 	LEFT JOIN inspeksi i ON i.user_uuid = u.uuid
-	LEFT JOIN blok_inspeksi bi ON bi.inspeksi_id = i.id
+	LEFT JOIN blok_inspeksi bi ON bi.inspeksi_id = i.id AND TO_CHAR(i.date, 'YYYYMM') = '202505'
 WHERE
 	NOT emp.is_deleted
 	AND emp.estate_id IS NOT NULL
 	AND emp.role_name IS NOT NULL
-	AND TO_CHAR(i.date, 'YYYYMM') = '202505'
 GROUP BY 
 	emp.estate,
 	emp.role_name,
