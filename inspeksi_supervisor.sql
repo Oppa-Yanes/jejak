@@ -40,16 +40,17 @@ SELECT
 	UPPER(emp.emp_name) AS name,
 	emp.division,
 	ins.block,
+	ins.spv_name,
+	ins.job_level,
 	ins.penalty_code,
 	ins.penalty_descr,
-	ins.job_level,
-	ins.spv_name,
 	ins.qty,
 	ins.inspection_date,
 	ins.no_tph,
 	ins.no_baris,
 	ins.no_pokok,
-	ins.description
+	--REGEXP_REPLACE(ins.description, '[^[:alnum:] ]', '. ', 'g') description
+	REGEXP_REPLACE(ins.description, '[\n\r\t]', '.', 'g') description
 FROM
 	employee emp
 	LEFT JOIN inspection ins ON ins.pemanen_idx = emp.id AND TO_CHAR(ins.inspection_date,'YYYYMM') = '202505'
@@ -65,4 +66,5 @@ ORDER BY
 	ins.penalty_code,
 	ins.job_level DESC
 ;
+
 
