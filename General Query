@@ -1,8 +1,8 @@
--- CEK VERSI 2.26
+-- CEK INSTALASI VERSI 2.26
 WITH inspeksi AS (
 	SELECT
 		i.user_uuid,
-		MAX(i.date::timestamp + bi.time) AS date
+		MAX(TO_CHAR(i.date,'YYYY-MM-DD') || ' ' || TO_CHAR(bi.time,'HH24:MI')) AS date
 	FROM
 		blok_inspeksi bi
 		LEFT JOIN inspeksi i ON i.id = bi.inspeksi_id
