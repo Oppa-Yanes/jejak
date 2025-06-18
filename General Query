@@ -1,3 +1,32 @@
+-- CEK VERSI 2.26
+WITH inspeksi AS (
+	SELECT
+		i.user_uuid,
+		MAX(i.date::timestamp + bi.time) AS date
+	FROM
+		blok_inspeksi bi
+		LEFT JOIN inspeksi i ON i.id = bi.inspeksi_id
+	WHERE
+		bi.description ILIKE '%instalasi%'
+		OR bi.description ILIKE '%test%'
+	GROUP BY
+		i.user_uuid
+)
+SELECT
+	u.name,
+	u.job_position,
+	u.device_model,
+	i.date
+FROM
+	users u
+	LEFT JOIN inspeksi i ON i.user_uuid = u.uuid
+WHERE
+	u.device_model IS NOT NULL
+ORDER BY
+	i.date desc
+;
+
+
 /*
 select 
 	*
