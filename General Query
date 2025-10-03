@@ -100,3 +100,19 @@ where id in (
 		u.name = 'Devi Hermansa'
 );
 
+-- jumlah inspeksi per bulan
+SELECT
+	TO_CHAR(i.date, 'YYYYMM') periode,
+	COUNT(bi.*) inspeksi_cnt
+FROM 
+	blok_inspeksi bi
+	LEFT JOIN inspeksi i on i.id = bi.inspeksi_id
+	LEFT JOIN users u on u.uuid = i.user_uuid
+WHERE 
+	TO_CHAR(i.date, 'YYYYMM') >= '202504'
+GROUP BY
+	TO_CHAR(i.date, 'YYYYMM')
+ORDER BY
+	TO_CHAR(i.date, 'YYYYMM')
+;
+
