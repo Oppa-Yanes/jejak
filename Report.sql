@@ -58,6 +58,40 @@ ORDER BY
     UPPER(u.name)
 ;
 
+-- Download WMS
+SELECT
+	c.name category,
+	e.name estate,
+	d.name divisi,
+	bi.blok,
+	bi.water_level_qty water_level,
+	CASE 
+		WHEN bi.wms_status = 'b' THEN 'Bersih'
+		WHEN bi.wms_status = 'r' THEN 'Rusak'
+		ELSE '-'
+	END status_device,
+	i.date tanggal,
+	u.name petugas,
+	u.job_position jabatan
+FROM
+	blok_inspeksi bi
+	LEFT JOIN inspeksi i ON i.id = bi.inspeksi_id
+	LEFT JOIN category c ON c.id = bi.category_id 
+	LEFT JOIN users u ON u.uuid = i.user_uuid
+	LEFT JOIN estate e ON e.id = i.estate_id 
+	LEFT JOIN divisi d ON d.id = bi.divisi_id 
+WHERE
+	bi.category_id IN (12,13)
+	--AND bi.estate_id IN (13,14,15,16)
+	AND TO_CHAR(i.date,'YYYYMMDD') BETWEEN '20250927' AND '20251003' 
+ORDER BY
+	c.name,
+	e.name,
+	d.name,
+	i.date
+;
+
+
 -- Cek Hasil Upload
 SELECT
     u.nomor_induk_pegawai AS nip,
