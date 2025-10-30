@@ -116,3 +116,22 @@ ORDER BY
 	TO_CHAR(i.date, 'YYYYMM')
 ;
 
+-- pareto per bulan
+SELECT
+	TO_CHAR(i.date, 'YYYYMM') periode,
+	c.name,
+	COUNT(bi.*) inspeksi_cnt
+FROM 
+	blok_inspeksi bi
+	LEFT JOIN inspeksi i on i.id = bi.inspeksi_id
+	LEFT JOIN users u on u.uuid = i.user_uuid
+	left join category c on c.id = bi.category_id
+WHERE 
+	TO_CHAR(i.date, 'YYYYMM') >= '202510'
+GROUP BY
+	TO_CHAR(i.date, 'YYYYMM'),
+	c.name
+ORDER BY
+	TO_CHAR(i.date, 'YYYYMM'),
+	COUNT(bi.*) DESC
+;
