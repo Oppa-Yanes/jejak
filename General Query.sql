@@ -119,15 +119,17 @@ ORDER BY
 -- pareto per bulan
 SELECT
 	TO_CHAR(i.date, 'YYYYMM') periode,
-	c.name,
-	COUNT(bi.*) inspeksi_cnt
+	c.name category,
+	COUNT(bi.*) jml_inspeksi
 FROM 
 	blok_inspeksi bi
 	LEFT JOIN inspeksi i on i.id = bi.inspeksi_id
 	LEFT JOIN users u on u.uuid = i.user_uuid
 	left join category c on c.id = bi.category_id
+	LEFT JOIN estate e ON e.id = i.estate_id
 WHERE 
 	TO_CHAR(i.date, 'YYYYMM') >= '202510'
+	--AND e.company_id = 2
 GROUP BY
 	TO_CHAR(i.date, 'YYYYMM'),
 	c.name
@@ -135,3 +137,29 @@ ORDER BY
 	TO_CHAR(i.date, 'YYYYMM'),
 	COUNT(bi.*) DESC
 ;
+
+-- jumlah device by merek
+WITH device AS (
+	SELECT
+		SPLIT_PART(u.device_model, ' ', 1) AS device_brand,
+		SPLIT_PART(u.device_model, ' ', 2) || ' - ' || SPLIT_PART(u.device_model, ' ', 3) AS device_type
+	FROM 
+		users u
+		LEFT JOIN inspeksi i ON i.user_uuid = u.uuid
+	WHERE 
+		TO_CHAR(i.date, 'YYYYMM') >= '202504'
+		AND i.id IS NOT NULL
+		AND u.device_model IS NOT NULL
+		AND u.device_model <> ''
+)
+SELECT
+	UPPER(d.device_brand) device_brand,
+	COUNT(DISTINCT d.device_type) jml_device
+FROM
+	device d
+GROUP BY
+	d.device_brand
+ORDER BY
+	jml_device DESC;
+
+
