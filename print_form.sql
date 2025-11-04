@@ -12,9 +12,9 @@ SELECT
 	--bi.divisi_id,
 	div.name divisi,
 	--i.user_uuid,
-	u.name ||' / '|| u.nomor_induk_pegawai mandor,
-	e.emp_name ||' / '|| e.nip harverster,
-	b.code block,
+	mandor.emp_name ||' / '|| mandor.nip mandor,
+	harvester.emp_name ||' / '|| harvester.nip pemanen,
+	block.code block,
 	bi.no_baris,
 	--p.code penalty,
 	--bi.qty penalty_amt
@@ -30,8 +30,9 @@ FROM
 	blok_inspeksi bi
 	LEFT JOIN inspeksi i ON i.id = bi.inspeksi_id
 	LEFT JOIN users u ON u.uuid = i.user_uuid
-	LEFT JOIN employee e ON e.id = bi.emp_pemanen_id 
-	LEFT JOIN blok b ON b.id = bi.blok_id 
+	LEFT JOIN employee mandor ON mandor.id = u.odoo_id 
+	LEFT JOIN employee harvester ON harvester.id = bi.emp_pemanen_id 
+	LEFT JOIN blok block ON block.id = bi.blok_id 
 	LEFT JOIN estate est ON est.id = bi.estate_id 
 	LEFT JOIN divisi div ON div.id = bi.divisi_id 
 	LEFT JOIN penalty p ON p.id = bi.penalty_id 
@@ -46,18 +47,18 @@ GROUP BY
 	--bi.divisi_id,
 	div.name,
 	--i.user_uuid,
-	u.name,
-	u.nomor_induk_pegawai,
-	e.emp_name,
-	e.nip,
-	b.code,
+	mandor.emp_name,
+	mandor.nip,
+	harvester.emp_name,
+	harvester.nip,
+	block.code,
 	bi.no_baris
 ORDER BY
-	u.name,
-	u.nomor_induk_pegawai,
-	e.emp_name,
-	e.nip,
-	b.code,
+	mandor.emp_name,
+	mandor.nip,
+	harvester.emp_name,
+	harvester.nip,
+	block.code,
 	bi.no_baris
 ;
 
