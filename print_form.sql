@@ -1,10 +1,9 @@
 -- form cetak mutu ancak
 WITH condition AS (
 	SELECT
-		3 estate_id,
-		18 division_id,
-		'66d90931-5cb1-4302-9081-8e649c7dc50c' mandor_id,
 		10 category_id,
+		1 estate_id,
+		4 division_id,
 		'20251022' inspection_date
 )
 SELECT
@@ -40,7 +39,6 @@ FROM
 		bi.category_id = cond.category_id 
 		AND bi.estate_id = cond.estate_id 
 		AND bi.divisi_id = cond.division_id 
-		--AND i.user_uuid::TEXT = cond.mandor_id 
 		AND TO_CHAR(i.date,'YYYYMMDD') = cond.inspection_date
 GROUP BY
 	--bi.estate_id,
@@ -55,10 +53,10 @@ GROUP BY
 	b.code,
 	bi.no_baris
 ORDER BY
-	u.name||' / '||u.nomor_induk_pegawai,
+	u.name,
+	u.nomor_induk_pegawai,
+	e.emp_name,
+	e.nip,
 	b.code,
 	bi.no_baris
 ;
-
-
-
