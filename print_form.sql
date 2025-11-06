@@ -73,14 +73,14 @@ ORDER BY
 WITH condition AS (
 	SELECT
 		11 category_id,
-		1 estate_id,
-		4 division_id,
+		3 estate_id,
+		18 division_id,
 		'20251022' inspection_date
 )
 SELECT
-	--bi.estate_id,
+	bi.estate_id,
 	est.name estate,
-	--bi.divisi_id,
+	bi.divisi_id,
 	div.name divisi,
 	--i.user_uuid,
 	mandor.emp_name ||' / '|| mandor.nip mandor,
@@ -89,6 +89,7 @@ SELECT
 	harvester.fp_id,
 	block.code block,
 	tph.code tph,
+	harvester.fp_id,
 	bi.ripe_qty+bi.unripe_qty+bi.rotten_qty+bi.lstalk_qty total_qty,
 	bi.ripe_qty,
 	bi.unripe_qty,
@@ -115,8 +116,8 @@ FROM
 	LEFT JOIN penalty p ON p.id = bi.penalty_id 
 	JOIN condition cond ON 
 		bi.category_id = cond.category_id 
-		--AND bi.estate_id = cond.estate_id 
-		--AND bi.divisi_id = cond.division_id 
+		AND bi.estate_id = cond.estate_id 
+		AND bi.divisi_id = cond.division_id 
 		AND TO_CHAR(i.date,'YYYYMMDD') = cond.inspection_date
 WHERE
 	LEFT(spv.job_level,1) IN ('A','B','C','D')
