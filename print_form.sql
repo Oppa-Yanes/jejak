@@ -9,8 +9,10 @@ WITH condition AS (
 SELECT
 	--bi.estate_id,
 	est.name estate,
+	mgr.emp_name manager,
 	--bi.divisi_id,
 	div.name divisi,
+	ass.emp_name assisten,
 	--i.user_uuid,
 	mandor.emp_name ||' / '|| mandor.nip mandor,
 	harvester.emp_name ||' / '|| harvester.nip pemanen,
@@ -30,11 +32,14 @@ FROM
 	blok_inspeksi bi
 	LEFT JOIN inspeksi i ON i.id = bi.inspeksi_id
 	LEFT JOIN users u ON u.uuid = i.user_uuid
-	LEFT JOIN employee mandor ON mandor.id = u.odoo_id 
 	LEFT JOIN employee harvester ON harvester.id = bi.emp_pemanen_id 
+	LEFT JOIN foreman_group fg ON fg.id = harvester.foreman_group_id 
+	LEFT JOIN employee mandor ON mandor.id = fg.foreman_id 
 	LEFT JOIN blok block ON block.id = bi.blok_id 
 	LEFT JOIN estate est ON est.id = bi.estate_id 
+	LEFT JOIN employee mgr ON mgr.id = est.estate_manager_id
 	LEFT JOIN divisi div ON div.id = bi.divisi_id 
+	LEFT JOIN employee ass ON ass.id = div.asisten_id 
 	LEFT JOIN penalty p ON p.id = bi.penalty_id 
 	JOIN condition cond ON 
 		bi.category_id = cond.category_id 
@@ -44,8 +49,10 @@ FROM
 GROUP BY
 	--bi.estate_id,
 	est.name,
+	mgr.emp_name,
 	--bi.divisi_id,
 	div.name,
+	ass.emp_name,
 	--i.user_uuid,
 	mandor.emp_name,
 	mandor.nip,
