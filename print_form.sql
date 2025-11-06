@@ -12,7 +12,7 @@ SELECT
 	mgr.emp_name manager,
 	--bi.divisi_id,
 	div.name divisi,
-	ass.emp_name assisten,
+	ass.emp_name asisten,
 	--i.user_uuid,
 	mandor.emp_name ||' / '|| mandor.nip mandor,
 	harvester.emp_name ||' / '|| harvester.nip pemanen,
@@ -80,8 +80,11 @@ WITH condition AS (
 SELECT
 	bi.estate_id,
 	est.name estate,
+	mgr.emp_name manager,
 	bi.divisi_id,
 	div.name divisi,
+	ass.emp_name asisten,
+	askep.emp_name askep,
 	--i.user_uuid,
 	mandor.emp_name ||' / '|| mandor.nip mandor,
 	kerani.emp_name ||' / '|| kerani.nip kerani,
@@ -112,7 +115,10 @@ FROM
 	LEFT JOIN blok block ON block.id = bi.blok_id 
 	LEFT JOIN tph tph ON tph.id = bi.tph_id 
 	LEFT JOIN estate est ON est.id = bi.estate_id 
+	LEFT JOIN employee mgr ON mgr.id = est.estate_manager_id
 	LEFT JOIN divisi div ON div.id = bi.divisi_id 
+	LEFT JOIN employee ass ON ass.id = div.asisten_id 
+	LEFT JOIN employee askep ON askep.id = div.asisten_kepala_id 
 	LEFT JOIN penalty p ON p.id = bi.penalty_id 
 	JOIN condition cond ON 
 		bi.category_id = cond.category_id 
