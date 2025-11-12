@@ -61,6 +61,14 @@ ORDER BY
 -- Download WMS
 SELECT
 	c.name category,
+	CASE
+		WHEN e.name ~~ '%MUSI%' THEN 'MME' 
+		WHEN e.name ~~ '%LEMATANG%' THEN 'LME' 
+		WHEN e.name ~~ 'PLASMA%' AND e.name ~~ '%1' THEN 'PAM1' 
+		WHEN e.name ~~ 'PLASMA%' AND e.name ~~ '%2' THEN 'PAM2' 
+		WHEN e.name ~~ '%LARAS KARYA KAHURIPAN%' THEN 'LKK' 
+		ELSE 'LAINNYA'
+	END estate_code,
 	e.name estate,
 	d.name divisi,
 	bi.blok,
@@ -83,7 +91,7 @@ FROM
 WHERE
 	bi.category_id IN (12,13)
 	--AND bi.estate_id IN (13,14,15,16)
-	AND TO_CHAR(i.date,'YYYYMMDD') BETWEEN '20250927' AND '20251003' 
+	AND TO_CHAR(i.date,'YYYYMMDD') BETWEEN '20251001' AND '20251130' 
 ORDER BY
 	c.name,
 	e.name,
